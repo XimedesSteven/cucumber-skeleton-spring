@@ -6,8 +6,5 @@ target/*
 *.iml
 target
 .externalToolBuilders
-operation/*
 rebel.xml
 out
-.springBeans
-src/dev/conv
