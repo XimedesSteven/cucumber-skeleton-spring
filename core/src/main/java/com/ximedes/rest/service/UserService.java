@@ -16,7 +16,6 @@ public class UserService {
 
 	public User saveUser(User user) {
 		userMapper.saveUser(user.getName(), user.getEmail());
-		System.out.println("Saved user");
 		return user;
 	}
 }
