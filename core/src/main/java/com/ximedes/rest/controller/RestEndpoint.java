@@ -14,12 +14,14 @@ public class RestEndpoint {
 
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
 	public ResponseEntity<User> get(@PathVariable int userId) {
+		System.out.println("Retreiving user");
 		User user = userService.getUser(userId);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public ResponseEntity<User> post(@RequestBody User user) {
+		System.out.println("Saving user");
 		User savedUser = userService.saveUser(user);
 		return new ResponseEntity<>(savedUser, HttpStatus.OK);
 	}
