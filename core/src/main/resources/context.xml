@@ -3,13 +3,38 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-2.5.xsd
-	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
     <tx:annotation-driven/>
     <context:component-scan base-package="com.ximedes.rest"/>
 
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:file:~/dataSource"/>
+        <property name="username" value=""/>
+        <property name="password" value=""/>
+    </bean>
+
+    <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="validateOnMigrate" value="false"/>
+        <property name="table" value="SCHEMA_VERSION"/>
+        <property name="locations" value="classpath:/db/migration"/>
+        <property name="initOnMigrate" value="true"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" depends-on="flyway">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.ximedes.rest.model.UserMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
 </beans>

@@ -1,22 +1,21 @@
 package com.ximedes.rest.service;
 
 import com.ximedes.rest.model.User;
+import com.ximedes.rest.model.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class UserService {
 
-	private static Map<Integer, User> users = new HashMap<>();
+	@Autowired UserMapper userMapper;
 
 	public User getUser(int id) {
-		return users.get(id);
+		return userMapper.getUser(id);
 	}
 
 	public User saveUser(User user) {
-		users.put(users.size(), user);
+		userMapper.saveUser(user.getName(), user.getEmail());
 		System.out.println("Saved user");
 		return user;
 	}
